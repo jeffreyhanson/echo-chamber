@@ -60,5 +60,5 @@ src-i386
 *.RDATA
 *.rds
 *.csv
-
+.httr-oauth
 

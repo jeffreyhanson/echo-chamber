@@ -1,1 +1,41 @@
- 
+ #### Initialization
+# set R parameters
+rm(list=ls())
+options(stringsAsFactors=FALSE)
+setwd(file.path(Sys.getenv('HOME'), 'GitHub', 'echo-chamber'))
+
+# set program parameters
+inpDIR='data/twitter_data/tweets/ngo'
+expDIR='data/twitter_data/tweets/user'
+
+# load deps
+library(magrittr)
+library(plyr)
+library(dplyr)
+library(data.table)
+library(twitteR)
+source('scripts/initialization/function_definitions.R')
+
+# define functions
+test=function() {source('/home/jeff/GitHub/echo-chamber/scripts/data_collection/2_download_user_retweets.R')}
+
+#### Preliminary processing
+# load file paths
+inpPTHS=dir(inpDIR)
+
+#### Main processing
+ret=llply(inpPTHS, .fun=function(x) {
+	# load data
+	currDF=readRDS(file.path(inpDIR, x))
+	subDF=filter(currDF, retweetCount > 0)
+	
+	# get retweets
+	
+	
+
+	# save data
+
+	
+})
+
+
