@@ -111,8 +111,8 @@ download_retweeters=function(id, outputDIR, overwrite=FALSE) {
 		retweetersCHR=c()
 		while(TRUE) {
 			# download data
-			retweetersCHR=try(retweeters(id, n=1000), silent=TRUE)
-			if (!inherits(retweetersCHR, 'try-error')) {
+			retweetersCHR=suppressWarnings(try(retweeters(id, n=1000), silent=TRUE))
+			if (!inherits(retweetersCHR, 'try-error') & length(retweetersCHR)>0) {
 				# if no partial results returned then store results and start next batch
 				break
 			} else {
@@ -134,5 +134,29 @@ download_retweeters=function(id, outputDIR, overwrite=FALSE) {
 
 
 download_followers=function(id, outputDIR, overwrite=FALSE) {
-	stop('funciton not written')
+	usrObj=getUser(id)
+	currExpPTH=paste0(outputDIR,'/',id,'.rds')
+	if (!file.exists(currExpPTH) || overwrite) {
+		# download retweeters
+		followersCHR=c()
+		while(TRUE) {
+			# download data
+			followersCHR=suppressWarnings(try(retweeters(id, n=1000), silent=TRUE))
+			if (!inherits(followersCHR, 'try-error') & length(followersCHR)>0) {
+				# if no partial results returned then store results and start next batch
+				break
+			} else {
+				# sleep for a while and try again
+				cat('\t\t\tlimit reached sleeping\n')
+				Sys.sleep(100)
+			}
+		}
+		
+		# save data
+		saveRDS(followersCHR, currExpPTH)
+	} else {
+		expDF=readRDS(currExpPTH)
+	}
+	# return results
+	return(TRUE)
 }
