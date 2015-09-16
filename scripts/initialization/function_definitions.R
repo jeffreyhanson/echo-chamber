@@ -1,6 +1,6 @@
 #### Initialise twitter connection
 # initialise twitter connection
-oauth=readRDS('data/credentials/twitter.rda')
+oauth=readRDS('/home/jeff/GitHub/echo-chamber/data/credentials/twitter.rda')
 original_ooption <- options("httr_oauth_cache")
 options(httr_oauth_cache=TRUE)
 setup_twitter_oauth(oauth$api_key, oauth$api_secret, oauth$access_token, oauth$access_token_secret)
@@ -141,7 +141,7 @@ download_followers=function(id, outputDIR, overwrite=FALSE) {
 		followersCHR=c()
 		while(TRUE) {
 			# download data
-			followersCHR=suppressWarnings(try(retweeters(id, n=1000), silent=TRUE))
+			followersCHR=suppressWarnings(try(usrObj$getFollowers(), silent=TRUE))
 			if (!inherits(followersCHR, 'try-error') & length(followersCHR)>0) {
 				# if no partial results returned then store results and start next batch
 				break

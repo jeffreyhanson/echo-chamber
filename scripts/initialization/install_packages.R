@@ -6,7 +6,7 @@ req_pkgs=c(
 	'twitteR',
 	'streamR'
 )
-miss_pkgs=setdiff(req_pkgs, installed.packages()[,,"Package"])
+miss_pkgs=setdiff(req_pkgs, installed.packages()[,"Package"])
 if (length(miss_pkgs)>0)
 	install.packages(miss_pkgs)
 
