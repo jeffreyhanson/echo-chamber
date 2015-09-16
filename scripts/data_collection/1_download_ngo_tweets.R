@@ -2,7 +2,7 @@
 # set R parameters
 rm(list=ls())
 options(stringsAsFactors=FALSE)
-setwd(file.path(Sys.getenv('HOME'), 'GitHub', 'echo-chamber'))
+##Hi Jeff
 
 # set system parameters
 inpPTH='data/raw_data/ngo_handles.csv'
