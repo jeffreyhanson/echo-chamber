@@ -67,7 +67,72 @@ download_user_timeline=function(usr, outputDIR, overwrite=FALSE) {
 	return(expDF)
 }
 
-download_retweets=function(id) {
-	stop('Function not written')
+download_retweets=function(id, outputDIR, overwrite=FALSE) {
+# 	cat('starting tweet',id,'\n')
+	currExpPTH=paste0(outputDIR,'/',id,'.rds')
+	if (!file.exists(currExpPTH) || overwrite) {
+		# download timeline
+		while(TRUE) {
+			# download data
+			currTweetDF=try(retweets(id, n=100), silent=TRUE)
+			if (!inherits(currTweetDF, 'try-error')) {
+				# if no partial results returned then store results and start next batch
+# 				cat("\t\t\tdownloaded",nrow(currTweetDF),"tweets\n")
+				break
+			} else {
+				# sleep for a while and try again
+				cat('\t\t\tlimit reached sleeping\n')
+				Sys.sleep(100)
+			}
+		}
+		
+		# generate data.frame
+# 		cat('\tsanitsing strings\n')
+		expDF=twListToDF(currTweetDF)
+		expDF$text=gsub("'", "", expDF$text)
+		expDF$text=gsub('"', '', expDF$text)
+		
+		# save data
+		saveRDS(expDF, currExpPTH)
+	} else {
+		expDF=readRDS(currExpPTH)
+	}
+	
+	# return results
+	return(TRUE)
 }
  
+
+download_retweeters=function(id, outputDIR, overwrite=FALSE) {
+# 	cat('starting tweet',id,'\n')
+	currExpPTH=paste0(outputDIR,'/',id,'.rds')
+	if (!file.exists(currExpPTH) || overwrite) {
+		# download retweeters
+		retweetersCHR=c()
+		while(TRUE) {
+			# download data
+			retweetersCHR=try(retweeters(id, n=1000), silent=TRUE)
+			if (!inherits(retweetersCHR, 'try-error')) {
+				# if no partial results returned then store results and start next batch
+				break
+			} else {
+				# sleep for a while and try again
+				cat('\t\t\tlimit reached sleeping\n')
+				Sys.sleep(100)
+			}
+		}
+		
+		# save data
+		saveRDS(retweetersCHR, currExpPTH)
+	} else {
+		expDF=readRDS(currExpPTH)
+	}
+	# return results
+	return(TRUE)
+}
+
+
+
+download_followers=function(id, outputDIR, overwrite=FALSE) {
+	stop('funciton not written')
+}
